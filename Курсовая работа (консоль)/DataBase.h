@@ -15,7 +15,10 @@ public:
 
 	void read();
 	void write() const;
+	VALUE* find(const KEY&);
+	
 
+	VALUE& operator[](const KEY&);
 	template<class KEY, class VALUE>
 	friend std::ostream& operator<< (std::ostream&, const DataBase<KEY, VALUE>&);
 	template<class KEY, class VALUE>
@@ -56,6 +59,19 @@ inline void DataBase<KEY, VALUE>::write() const
 	{
 		std::cerr << "Failed to save file!\a" << std::endl;
 	}
+}
+
+template<class KEY, class VALUE>
+inline VALUE* DataBase<KEY, VALUE>::find(const KEY& key)
+{
+	auto it = data.find(key);
+	return (it == data.end() ? nullptr : &it->second);
+}
+
+template<class KEY, class VALUE>
+inline VALUE& DataBase<KEY, VALUE>::operator[](const KEY& key)
+{
+	return data[key];
 }
 
 template<class KEY, class VALUE>

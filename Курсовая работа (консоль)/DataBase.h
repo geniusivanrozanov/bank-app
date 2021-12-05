@@ -19,7 +19,7 @@ public:
 	template<class KEY, class VALUE>
 	friend std::ostream& operator<< (std::ostream&, const DataBase<KEY, VALUE>&);
 	template<class KEY, class VALUE>
-	friend std::ostream& operator>> (std::istream&, DataBase<KEY, VALUE>&);
+	friend std::istream& operator>> (std::istream&, DataBase<KEY, VALUE>&);
 };
 
 template<class KEY, class VALUE>
@@ -71,7 +71,7 @@ inline std::ostream& operator<<(std::ostream& out, const DataBase<KEY, VALUE>& d
 }
 
 template<class KEY, class VALUE>
-inline std::ostream& operator>>(std::istream& in, DataBase<KEY, VALUE>& db)
+inline std::istream& operator>>(std::istream& in, DataBase<KEY, VALUE>& db)
 {
 	KEY t_key;
 	VALUE t_value;
@@ -79,7 +79,7 @@ inline std::ostream& operator>>(std::istream& in, DataBase<KEY, VALUE>& db)
 	while (!in.eof())
 	{
 		in >> t_key >> t_value;
-		data.emplace(t_key, t_value);
+		db.data.emplace(t_key, t_value);
 	}
 	return in;
 }

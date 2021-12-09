@@ -21,6 +21,7 @@ public:
 	void deleteByIndex(size_t);
 	void sort(int (*comp)(const T&, const T&), size_t, size_t);
 
+	size_t size() const;
 	size_t indexOf(const T&) const;
 
 	T& operator[](size_t);
@@ -126,6 +127,12 @@ inline void Array<T>::sort(int(*comp)(const T&, const T&), size_t left, size_t r
 
 	if (j > left) sort(comp, left, j);
 	if (i < right) sort(comp, i, right);
+}
+
+template<class T>
+inline size_t Array<T>::size() const
+{
+	return size;
 }
 
 template<class T>

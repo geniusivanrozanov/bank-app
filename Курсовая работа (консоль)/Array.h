@@ -18,6 +18,7 @@ public:
 	~Array();
 
 	void push(T);
+	void deleteByIndex(size_t);
 
 	T& operator[](size_t);
 };
@@ -86,6 +87,18 @@ inline void Array<T>::push(T element)
 		data = reallocate();
 	}
 	data[size - 1] = element;
+}
+
+template<class T>
+inline void Array<T>::deleteByIndex(size_t index)
+{
+	if (index > 0 && index < size)
+	{
+		for (size_t i = index; i < size - 1; i++)
+		{
+			data[i] = data[i + 1];
+		}
+	}
 }
 
 template<class T>

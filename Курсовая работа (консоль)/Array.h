@@ -8,6 +8,7 @@ private:
 	size_t m_size;
 	size_t m_capacity;
 
+
 	T* allocate();
 	T* reallocate();
 
@@ -17,6 +18,7 @@ public:
 	Array(const Array&);
 	~Array();
 
+	static size_t max_size();
 	void push(T);
 	void deleteByIndex(size_t);
 	void sort(int (*comp)(const T&, const T&), size_t, size_t);
@@ -27,6 +29,12 @@ public:
 
 	T& operator[](size_t);
 };
+
+template<class T>
+inline size_t Array<T>::max_size()
+{
+	return std::numeric_limits<size_t>::max();
+}
 
 template<class T>
 inline T* Array<T>::allocate()
@@ -46,6 +54,14 @@ inline void Array<T>::destroy()
 template<class T>
 inline T* Array<T>::reallocate()
 {
+	if (m_capacity * 1.5 + 1 <= max_size())
+	{
+		m_capacity = m_capacity * 1.5 + 1;
+	}
+	else
+	{
+		m_capacity = max_size();
+	}
 	T* temp_data = allocate();
 	if (data)
 	{
@@ -85,13 +101,11 @@ inline Array<T>::~Array()
 template<class T>
 inline void Array<T>::push(T element)
 {
-	m_size++;
-	if (m_capacity <m_size)
+	if (m_capacity <= m_size)
 	{
-		m_capacity = m_size * 1.5;
 		data = reallocate();
 	}
-	data[m_size - 1] = element;
+	data[m_size++] = element;
 }
 
 template<class T>
@@ -109,7 +123,7 @@ inline void Array<T>::deleteByIndex(size_t index)
 template<class T>
 inline void Array<T>::sort(int(*comp)(const T&, const T&), size_t left, size_t right)
 {
-	int i = left, j = right;
+	size_t i = left, j = right;
 	T p = data[(i + j) / 2];
 
 	while (i < j)

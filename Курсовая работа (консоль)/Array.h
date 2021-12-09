@@ -16,6 +16,8 @@ public:
 	Array();
 	Array(const Array&);
 	~Array();
+
+	void push(T);
 };
 
 template<class T>
@@ -67,4 +69,16 @@ template<class T>
 inline Array<T>::~Array()
 {
 	destroy();
+}
+
+template<class T>
+inline void Array<T>::push(T element)
+{
+	size++;
+	if (capacity < size)
+	{
+		capacity = size * 1.5;
+		data = reallocate();
+	}
+	data[size - 1] = element;
 }

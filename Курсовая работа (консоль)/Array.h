@@ -20,6 +20,8 @@ public:
 	void push(T);
 	void deleteByIndex(size_t);
 
+	size_t indexOf(const T&) const;
+
 	T& operator[](size_t);
 };
 
@@ -99,6 +101,20 @@ inline void Array<T>::deleteByIndex(size_t index)
 			data[i] = data[i + 1];
 		}
 	}
+}
+
+template<class T>
+inline size_t Array<T>::indexOf(const T& src) const
+{
+	size_t index;
+	for (index = size - 1; index >= 0; index--)
+	{
+		if (data[index] == src)
+		{
+			break;
+		}
+	}
+	return return index;
 }
 
 template<class T>

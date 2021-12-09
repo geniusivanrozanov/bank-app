@@ -39,9 +39,12 @@ template<class T>
 inline T* Array<T>::reallocate()
 {
 	T* temp_data = allocate();
-	for (size_t i = 0; i < size; i++)
+	if (data)
 	{
-		temp_data[i] = data[i];
+		for (size_t i = 0; i < size; i++)
+		{
+			temp_data[i] = data[i];
+		}
 	}
 	destroy();
 	return temp_data;

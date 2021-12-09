@@ -84,7 +84,7 @@ template<class T>
 inline Array<T>::Array(const Array& src)
 {
 	this->m_size= src.m_size;
-	this->capacity = src.m_size;
+	this->m_capacity = src.m_size;
 	this->data = this->allocate();
 	for (size_t i = 0; i < m_size; i++)
 	{

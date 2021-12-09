@@ -5,8 +5,8 @@ class Array
 {
 private:
 	T* data;
-	size_t size;
-	size_t capacity;
+	size_t m_size;
+	size_t m_capacity;
 
 	T* allocate();
 	T* reallocate();
@@ -22,6 +22,7 @@ public:
 	void sort(int (*comp)(const T&, const T&), size_t, size_t);
 
 	size_t size() const;
+	size_t capacity() const;
 	size_t indexOf(const T&) const;
 
 	T& operator[](size_t);
@@ -30,7 +31,7 @@ public:
 template<class T>
 inline T* Array<T>::allocate()
 {
-	return new T[capacity];
+	return new T[m_capacity];
 }
 
 template<class T>
@@ -48,7 +49,7 @@ inline T* Array<T>::reallocate()
 	T* temp_data = allocate();
 	if (data)
 	{
-		for (size_t i = 0; i < size; i++)
+		for (size_t i = 0; i < m_size; i++)
 		{
 			temp_data[i] = data[i];
 		}
@@ -59,17 +60,17 @@ inline T* Array<T>::reallocate()
 
 template<class T>
 inline Array<T>::Array()
-	: size(0), capacity(0), data(nullptr)
+	:m_size(0), m_capacity(0), data(nullptr)
 {
 }
 
 template<class T>
 inline Array<T>::Array(const Array& src)
 {
-	this->size = src.size;
-	this->capacity = src.size;
+	this->m_size= src.m_size;
+	this->capacity = src.m_size;
 	this->data = this->allocate();
-	for (size_t i = 0; i < size; i++)
+	for (size_t i = 0; i < m_size; i++)
 	{
 		this->data[i] = src.data();
 	}
@@ -84,21 +85,21 @@ inline Array<T>::~Array()
 template<class T>
 inline void Array<T>::push(T element)
 {
-	size++;
-	if (capacity < size)
+	m_size++;
+	if (m_capacity <m_size)
 	{
-		capacity = size * 1.5;
+		m_capacity = m_size * 1.5;
 		data = reallocate();
 	}
-	data[size - 1] = element;
+	data[m_size - 1] = element;
 }
 
 template<class T>
 inline void Array<T>::deleteByIndex(size_t index)
 {
-	if (index > 0 && index < size)
+	if (index > 0 && index < m_size)
 	{
-		for (size_t i = index; i < size - 1; i++)
+		for (size_t i = index; i <m_size - 1; i++)
 		{
 			data[i] = data[i + 1];
 		}
@@ -132,14 +133,20 @@ inline void Array<T>::sort(int(*comp)(const T&, const T&), size_t left, size_t r
 template<class T>
 inline size_t Array<T>::size() const
 {
-	return size;
+	return m_size;
+}
+
+template<class T>
+inline size_t Array<T>::capacity() const
+{
+	return m_capacity;
 }
 
 template<class T>
 inline size_t Array<T>::indexOf(const T& src) const
 {
 	size_t index;
-	for (index = size - 1; index >= 0; index--)
+	for (index = m_size- 1; index >= 0; index--)
 	{
 		if (data[index] == src)
 		{

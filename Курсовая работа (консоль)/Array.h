@@ -18,6 +18,8 @@ public:
 	~Array();
 
 	void push(T);
+
+	T& operator[](size_t);
 };
 
 template<class T>
@@ -84,4 +86,10 @@ inline void Array<T>::push(T element)
 		data = reallocate();
 	}
 	data[size - 1] = element;
+}
+
+template<class T>
+inline T& Array<T>::operator[](size_t index)
+{
+	return data[index];
 }

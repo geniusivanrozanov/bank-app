@@ -15,9 +15,9 @@ public:
 
 	void read();
 	void write() const;
+
 	VALUE* find(const KEY&);
 	
-
 	VALUE& operator[](const KEY&);
 	template<class KEY, class VALUE>
 	friend std::ostream& operator<< (std::ostream&, const DataBase<KEY, VALUE>&);

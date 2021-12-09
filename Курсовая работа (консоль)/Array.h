@@ -9,6 +9,7 @@ private:
 	size_t capacity;
 
 	T* allocate();
+	T* reallocate();
 
 	void destroy();
 public:
@@ -33,6 +34,18 @@ inline void Array<T>::destroy()
 }
 
 template<class T>
+inline T* Array<T>::reallocate()
+{
+	T* temp_data = allocate();
+	for (size_t i = 0; i < size; i++)
+	{
+		temp_data[i] = data[i];
+	}
+	destroy();
+	return temp_data;
+}
+
+template<class T>
 inline Array<T>::Array()
 	: size(0), capacity(0), data(nullptr)
 {
@@ -43,7 +56,7 @@ inline Array<T>::Array(const Array& src)
 {
 	this->size = src.size;
 	this->capacity = src.size;
-	this->allocate();
+	this->data = this->allocate();
 	for (size_t i = 0; i < size; i++)
 	{
 		this->data[i] = src.data();

@@ -19,6 +19,7 @@ public:
 
 	void push(T);
 	void deleteByIndex(size_t);
+	void sort(int (*comp)(const T&, const T&), size_t, size_t);
 
 	size_t indexOf(const T&) const;
 
@@ -104,6 +105,30 @@ inline void Array<T>::deleteByIndex(size_t index)
 }
 
 template<class T>
+inline void Array<T>::sort(int(*comp)(const T&, const T&), size_t left, size_t right)
+{
+	int i = left, j = right;
+	T p = data[(i + j) / 2];
+
+	while (i < j)
+	{
+		while (comp(data[i], p) < 0) i++;
+		while (comp(data[j], p) > 0) j--;
+		if (i <= j)
+		{
+			T temp = data[i];
+			data[i] = data[j];
+			data[j] = temp;
+			i++;
+			j--;
+		}
+	}
+
+	if (j > left) sort(comp, left, j);
+	if (i < right) sort(comp, i, right);
+}
+
+template<class T>
 inline size_t Array<T>::indexOf(const T& src) const
 {
 	size_t index;
@@ -114,7 +139,7 @@ inline size_t Array<T>::indexOf(const T& src) const
 			break;
 		}
 	}
-	return return index;
+	return index;
 }
 
 template<class T>

@@ -3,15 +3,16 @@
 #include <string>
 #include <iostream>
 #include <fstream>
+#include "String.h"
 
 template<class KEY, class VALUE>
 class DataBase
 {
 private:
 	std::map<KEY, VALUE> data;
-	const std::string FILE_NAME;
+	const String FILE_NAME;
 public:
-	DataBase(const std::string& file);
+	DataBase(const String& file);
 
 	void read();
 	void write() const;
@@ -26,8 +27,8 @@ public:
 };
 
 template<class KEY, class VALUE>
-inline DataBase<KEY, VALUE>::DataBase(const std::string& file)
-	:FILE_NAME(file)
+inline DataBase<KEY, VALUE>::DataBase(const String& file)
+	: FILE_NAME(file)
 {
 }
 

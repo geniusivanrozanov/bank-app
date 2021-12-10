@@ -1,4 +1,5 @@
 #pragma once
+#include <iostream>
 
 template<class T>
 class Node
@@ -8,11 +9,15 @@ private:
 	Node<T>* next;
 	Node<T>* prev;
 public:
+	Node(Node<T>* next = nullptr, Node<T>* prev = nullptr)
+		: next(next), prev(prev)
+	{}
 	template<class T>
 	friend class Stack;
 };
 
 /*
+		Main direction from UP to DOWN
 				<-Moving DOWN->
 	+---+			+---+			+---+		* <- head
 	| * |	 UP		|   |	 UP		|   |
@@ -46,10 +51,14 @@ private:
 public:
 	Stack();
 	~Stack();
+
+	void push(T);
+	T popUp();
+	T popDown();
 };
 
 template<class T>
-inline void Stack<T>::destroyToDown()
+inline void Stack<T>::destroyToUp()
 {
 	Node<T>* prev = head->prev;
 	Node<T>* temp;
@@ -63,7 +72,7 @@ inline void Stack<T>::destroyToDown()
 }
 
 template<class T>
-inline void Stack<T>::destroyToUp()
+inline void Stack<T>::destroyToDown()
 {
 	Node<T>* next = head->next;
 	Node<T>* temp;
@@ -91,4 +100,37 @@ inline Stack<T>::~Stack()
 		destroyToUp();
 		delete head;
 	}
+}
+
+template<class T>
+inline void Stack<T>::push(T element)
+{
+	Node<T>* temp = new Node<T>(head);
+	temp->value = element;
+	if (head)
+	{
+		destroyToUp();
+		head->prev = temp;
+	}
+	head = temp;
+}
+
+template<class T>
+inline T Stack<T>::popUp()
+{
+	if (head && head->prev)
+	{
+		head = head->prev;
+	}
+	return head->next->value;
+}
+
+template<class T>
+inline T Stack<T>::popDown()
+{
+	if (head && head->next)
+	{
+		head = head->next;
+	}
+	return head->prev->value;
 }

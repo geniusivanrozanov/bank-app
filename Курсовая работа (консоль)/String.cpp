@@ -14,6 +14,15 @@ char* String::reallocate()
 	return temp_str;
 }
 
+char* String::reallocate(size_t new_size)
+{
+	m_capacity = new_size;
+	char* temp_str = allocate();
+	strcpy_s(temp_str, m_capacity * sizeof(char), str);
+	destroy();
+	return temp_str;
+}
+
 
 void String::destroy()
 {
@@ -65,4 +74,26 @@ void String::push(const char element)
 	}
 	str[m_size++] = element;
 	str[m_size] = '\0';
+}
+
+String& String::operator+=(const String& src)
+{
+	m_size += src.m_size;
+	if (m_capacity < m_size + 1)
+	{
+		str = reallocate(m_size + 1);
+	}
+	strcat_s(str, m_capacity * sizeof(char), src.str);
+	return *this;
+}
+
+String& String::operator+=(const char* src)
+{
+	m_size += strlen(src);
+	if (m_capacity < m_size + 1)
+	{
+		str = reallocate(m_size + 1);
+	}
+	strcat_s(str, m_capacity * sizeof(char), src);
+	return *this;
 }

@@ -10,6 +10,7 @@ private:
 
 	char* allocate();
 	char* reallocate();
+	char* reallocate(size_t);
 
 	void destroy();
 public:
@@ -22,5 +23,8 @@ public:
 	size_t capacity() const;
 
 	void push(const char);
+
+	String& operator+=(const String&);
+	String& operator+=(const char*);
 };
 

@@ -42,6 +42,11 @@ String::String(const char* src)
 	strcpy_s(this->str, m_capacity * sizeof(char), src);
 }
 
+String::~String()
+{
+	destroy();
+}
+
 void String::push(const char element)
 {
 	if (m_capacity <= m_size + 1)

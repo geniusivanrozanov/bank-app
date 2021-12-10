@@ -16,6 +16,7 @@ public:
 	String();
 	String(const String&);
 	String(const char*);
+	~String();
 
 	void push(const char);
 };

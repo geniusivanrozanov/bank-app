@@ -45,7 +45,7 @@ private:
 	void destroyToUp();
 public:
 	Stack();
-
+	~Stack();
 };
 
 template<class T>
@@ -80,4 +80,15 @@ template<class T>
 inline Stack<T>::Stack()
 	: head(nullptr)
 {
+}
+
+template<class T>
+inline Stack<T>::~Stack()
+{
+	if (head)
+	{
+		destroyToDown();
+		destroyToUp();
+		delete head;
+	}
 }

@@ -87,13 +87,19 @@ String& String::operator+=(const String& src)
 	return *this;
 }
 
-String& String::operator+=(const char* src)
+String& String::operator=(const String& src)
 {
-	m_size += strlen(src);
-	if (m_capacity < m_size + 1)
-	{
-		str = reallocate(m_size + 1);
-	}
-	strcat_s(str, m_capacity * sizeof(char), src);
+	m_size = src.m_size;
+	m_capacity = m_size + 1;
+	destroy();
+	str = allocate();
+	strcpy_s(str, m_capacity * sizeof(char), src.str);
 	return *this;
+}
+
+const String operator+(const String& str1, const String& str2)
+{
+	String temp = str1;
+	temp += str2;
+	return temp;
 }

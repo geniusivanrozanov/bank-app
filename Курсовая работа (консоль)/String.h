@@ -25,6 +25,8 @@ public:
 	void push(const char);
 
 	String& operator+=(const String&);
-	String& operator+=(const char*);
+	String& operator=(const String&);
+
+	friend const String operator+(const String&, const String&);
 };
 

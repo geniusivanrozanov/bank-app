@@ -9,10 +9,14 @@ private:
 	size_t m_capacity;
 
 	char* allocate();
+	char* reallocate();
 
+	void destroy();
 public:
 	String();
 	String(const String&);
 	String(const char*);
+
+	void push(const char);
 };
 

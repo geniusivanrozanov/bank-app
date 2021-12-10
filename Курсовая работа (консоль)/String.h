@@ -1,4 +1,5 @@
 #pragma once
+#include <iostream>
 #include <cstring>
 
 class String
@@ -28,5 +29,7 @@ public:
 	String& operator=(const String&);
 
 	friend const String operator+(const String&, const String&);
+	friend std::istream& operator>>(std::istream&, String&);
+	friend std::ostream& operator<<(std::ostream&, const String&);
 };
 

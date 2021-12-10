@@ -47,6 +47,16 @@ String::~String()
 	destroy();
 }
 
+size_t String::size() const
+{
+	return m_size;
+}
+
+size_t String::capacity() const
+{
+	return m_capacity;
+}
+
 void String::push(const char element)
 {
 	if (m_capacity <= m_size + 1)

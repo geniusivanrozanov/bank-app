@@ -18,6 +18,9 @@ public:
 	String(const char*);
 	~String();
 
+	size_t size() const;
+	size_t capacity() const;
+
 	void push(const char);
 };
 

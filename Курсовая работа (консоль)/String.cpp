@@ -97,6 +97,11 @@ String& String::operator=(const String& src)
 	return *this;
 }
 
+String::operator const char* () const
+{
+	return str;
+}
+
 const String operator+(const String& str1, const String& str2)
 {
 	String temp = str1;

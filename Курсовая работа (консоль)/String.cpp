@@ -97,6 +97,16 @@ String& String::operator=(const String& src)
 	return *this;
 }
 
+bool String::operator==(const String& src)
+{
+	return !strcmp(str, src.str);
+}
+
+bool String::operator==(const char* src)
+{
+	return !strcmp(str, src);
+}
+
 String::operator const char* () const
 {
 	return str;

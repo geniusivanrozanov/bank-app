@@ -26,7 +26,7 @@ public:
 	+---+			+---+			+---+
 	|   |			|   |			| * |
 	+---+			+---+			+---+
-	|   |	DOWN	|   |	DOWN	|   |
+	|   |	DOWN		|   |	DOWN		|   |
 	+---+			+---+			+---+
 				<-Moving UP->
 	+---+			+---+			+---+
@@ -36,7 +36,7 @@ public:
 	+---+			+---+			+---+
 	| * |			|   |			|   |
 	+---+			+---+			+---+
-	|   |	DOWN	|   |	DOWN	|   |
+	|   |	DOWN		|   |	DOWN		|   |
 	+---+			+---+			+---+
 */
 
@@ -53,8 +53,10 @@ public:
 	~Stack();
 
 	void push(T);
+
 	T popUp();
 	T popDown();
+	T peek();
 };
 
 template<class T>
@@ -133,4 +135,10 @@ inline T Stack<T>::popDown()
 		head = head->next;
 	}
 	return head->prev->value;
+}
+
+template<class T>
+inline T Stack<T>::peek()
+{
+	return head->value;
 }

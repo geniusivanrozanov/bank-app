@@ -19,6 +19,7 @@ public:
 	Array(const Array&);
 	~Array();
 
+	static size_t max_size();
 	void push(T);
 	void deleteByIndex(size_t);
 	void sort(int (*comp)(const T&, const T&), size_t, size_t);

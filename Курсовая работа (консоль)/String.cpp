@@ -112,12 +112,12 @@ const String operator+(const String& str1, const String& str2)
 std::istream& operator>>(std::istream& in, String& str)
 {
 	char temp;
-	while(true)
+	while (!(in.peek() == ' ' || in.peek() == '\t' || in.peek() == '\n' || in.eof()))
 	{
-		temp = in.get();
-		if (temp == ' ' || temp == '\t' || temp == '\n' || in.eof()) break;
+		in >> temp;
 		str.push(temp);
 	}
+	in.get();
 	return in;
 }
 

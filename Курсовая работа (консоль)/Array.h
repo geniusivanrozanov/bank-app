@@ -28,8 +28,9 @@ public:
 
 	int indexOf(const T&) const;
 
-	//T& operator()();
+	T* operator()(const T&, int (*comp)(const T&, const T&));
 	T* find(const T&, int (*comp)(const T&, const T&));
+
 	T& operator[](size_t);
 	const T& operator[](size_t) const;
 };
@@ -172,6 +173,12 @@ inline int Array<T>::indexOf(const T& src) const
 		index--;
 	}
 	return index;
+}
+
+template<class T>
+inline T* Array<T>::operator()(const T& src, int(*comp)(const T&, const T&))
+{
+	return find(src, comp);
 }
 
 template<class T>

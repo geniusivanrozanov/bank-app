@@ -31,6 +31,7 @@ public:
 	//T& operator()();
 	T* find(const T&, int (*comp)(const T&, const T&));
 	T& operator[](size_t);
+	const T& operator[](size_t) const;
 };
 
 template<class T>
@@ -190,6 +191,12 @@ inline T* Array<T>::find(const T& src, int(*comp)(const T&, const T&))
 
 template<class T>
 inline T& Array<T>::operator[](size_t index)
+{
+	return data[index];
+}
+
+template<class T>
+inline const T& Array<T>::operator[](size_t index) const
 {
 	return data[index];
 }

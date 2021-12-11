@@ -121,6 +121,10 @@ const String operator+(const String& str1, const String& str2)
 
 std::istream& operator>>(std::istream& in, String& str)
 {
+	if (str.m_size)
+	{
+		str.m_size = 0;
+	}
 	char temp;
 	while (in.peek() == ' ' || in.peek() == '\t' || in.peek() == '\n' || in.eof())
 	{

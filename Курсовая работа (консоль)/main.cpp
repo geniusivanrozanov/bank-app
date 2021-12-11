@@ -13,15 +13,9 @@ int comp(const int& a, const int& b)
 
 int main()
 {
-	Stack<int> a;
-	for (size_t i = 0; i < 10; i++)
-	{
-		a.push(i + 1);
-	}
-	a.popDown();
-	a.popDown();
-	a.popDown();
-	a.push(777);
-	a.print();
+	DataBase<String> db("temp.txt");
+	db.read();
+	std::cout << db << std::endl;
+	db.write();
 	return 0;
 }

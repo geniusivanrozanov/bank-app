@@ -4,12 +4,13 @@
 #include <iostream>
 #include <fstream>
 #include "String.h"
+#include "Array.h"
 
-template<class KEY, class VALUE>
+template<class T>
 class DataBase
 {
 private:
-	std::map<KEY, VALUE> data;
+	Array<T> data;
 	const String FILE_NAME;
 public:
 	DataBase(const String& file);
@@ -17,23 +18,23 @@ public:
 	void read();
 	void write() const;
 
-	VALUE* find(const KEY&);
+	T* find(const T& src, int(*comp)(const T&, const T&));
 	
-	VALUE& operator[](const KEY&);
-	template<class KEY, class VALUE>
-	friend std::ostream& operator<< (std::ostream&, const DataBase<KEY, VALUE>&);
-	template<class KEY, class VALUE>
-	friend std::istream& operator>> (std::istream&, DataBase<KEY, VALUE>&);
+	T& operator[](size_t);
+	template<class T>
+	friend std::ostream& operator<< (std::ostream&, const DataBase<T>&);
+	template<class T>
+	friend std::istream& operator>> (std::istream&, DataBase<T>&);
 };
 
-template<class KEY, class VALUE>
-inline DataBase<KEY, VALUE>::DataBase(const String& file)
+template<class T>
+inline DataBase<T>::DataBase(const String& file)
 	: FILE_NAME(file)
 {
 }
 
-template<class KEY, class VALUE>
-inline void DataBase<KEY, VALUE>::read()
+template<class T>
+inline void DataBase<T>::read()
 {
 	std::ifstream fin(this->FILE_NAME, std::ios::in);
 	if (fin.is_open())
@@ -43,12 +44,12 @@ inline void DataBase<KEY, VALUE>::read()
 	}
 	else
 	{
-		std::cerr << "Empty file!\a" << std::endl;
+		std::cerr << "Failed to open file!\a" << std::endl;
 	}
 }
 
-template<class KEY, class VALUE>
-inline void DataBase<KEY, VALUE>::write() const
+template<class T>
+inline void DataBase<T>::write() const
 {
 	std::ofstream fout(this->FILE_NAME, std::ios::out);
 	if (fout.is_open())
@@ -62,41 +63,39 @@ inline void DataBase<KEY, VALUE>::write() const
 	}
 }
 
-template<class KEY, class VALUE>
-inline VALUE* DataBase<KEY, VALUE>::find(const KEY& key)
+template<class T>
+inline T* DataBase<T>::find(const T& src, int(*comp)(const T&, const T&))
 {
-	auto it = data.find(key);
-	return (it == data.end() ? nullptr : &it->second);
+	return data.find(src, comp);
 }
 
-template<class KEY, class VALUE>
-inline VALUE& DataBase<KEY, VALUE>::operator[](const KEY& key)
+template<class T>
+inline T& DataBase<T>::operator[](size_t index)
 {
-	return data[key];
+	return data[index];
 }
 
-template<class KEY, class VALUE>
-inline std::ostream& operator<<(std::ostream& out, const DataBase<KEY, VALUE>& db)
+template<class T>
+inline std::ostream& operator<<(std::ostream& out, const DataBase<T>& db)
 {
-	auto it = db.data.begin();
-	for (const auto last = --db.data.end(); it != last; it++)
+	size_t i;
+	for (i = 0; i < db.data.size() - 1; i++)
 	{
-		out << it->first << " " << it->second << std::endl;
+		out << db.data[i] << std::endl;
 	}
-	out << it->first << " " << it->second;
+	out << db.data[i];
 	return out;
 }
 
-template<class KEY, class VALUE>
-inline std::istream& operator>>(std::istream& in, DataBase<KEY, VALUE>& db)
+template<class T>
+inline std::istream& operator>>(std::istream& in, DataBase<T>& db)
 {
-	KEY t_key;
-	VALUE t_value;
+	T element;
 	in.peek();
 	while (!in.eof())
 	{
-		in >> t_key >> t_value;
-		db.data.emplace(t_key, t_value);
+		in >> element;
+		db.data.push(element);
 	}
 	return in;
 }

@@ -25,8 +25,14 @@ public:
 
 	void push(const char);
 
+	String toLower();
+	String toUpper();
+
 	String& operator+=(const String&);
+	String& operator+=(const char);
 	String& operator=(const String&);
+
+	static int compare(const String&, const String&);
 
 	bool operator==(const String&);
 	bool operator==(const char*);

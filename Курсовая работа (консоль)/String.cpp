@@ -76,6 +76,26 @@ void String::push(const char element)
 	str[m_size] = '\0';
 }
 
+String String::toLower()
+{
+	String temp;
+	for (size_t i = 0; i < m_size; i++)
+	{
+		temp += tolower(str[i]);
+	}
+	return temp;
+}
+
+String String::toUpper()
+{
+	String temp;
+	for (size_t i = 0; i < m_size; i++)
+	{
+		temp += toupper(str[i]);
+	}
+	return temp;
+}
+
 String& String::operator+=(const String& src)
 {
 	m_size += src.m_size;
@@ -87,8 +107,17 @@ String& String::operator+=(const String& src)
 	return *this;
 }
 
+String& String::operator+=(const char ch)
+{
+	push(ch);
+}
+
 String& String::operator=(const String& src)
 {
+	if (this == &src)
+	{
+		return *this;
+	}
 	m_size = src.m_size;
 	m_capacity = m_size + 1;
 	destroy();
@@ -97,14 +126,19 @@ String& String::operator=(const String& src)
 	return *this;
 }
 
+int String::compare(const String& str1, const String& str2)
+{
+	return strcmp(str1, str2);
+}
+
 bool String::operator==(const String& src)
 {
-	return !strcmp(str, src.str);
+	return !compare(str, src.str);
 }
 
 bool String::operator==(const char* src)
 {
-	return !strcmp(str, src);
+	return !compare(str, src);
 }
 
 String::operator const char* () const

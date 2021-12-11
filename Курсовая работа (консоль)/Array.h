@@ -25,7 +25,8 @@ public:
 
 	size_t size() const;
 	size_t capacity() const;
-	size_t indexOf(const T&) const;
+
+	int indexOf(const T&) const;
 
 	T& operator[](size_t);
 };
@@ -156,15 +157,16 @@ inline size_t Array<T>::capacity() const
 }
 
 template<class T>
-inline size_t Array<T>::indexOf(const T& src) const
+inline int Array<T>::indexOf(const T& src) const
 {
-	size_t index;
-	for (index = m_size- 1; index >= 0; index--)
+	int index = m_size - 1;
+	while (index >= 0)
 	{
 		if (data[index] == src)
 		{
 			break;
 		}
+		index--;
 	}
 	return index;
 }

@@ -123,8 +123,12 @@ inline T Stack<T>::popUp()
 	if (head && head->prev)
 	{
 		head = head->prev;
+		return head->next->value;
 	}
-	return head->next->value;
+	else if (head)
+	{
+		return head->value;
+	}
 }
 
 template<class T>
@@ -133,8 +137,12 @@ inline T Stack<T>::popDown()
 	if (head && head->next)
 	{
 		head = head->next;
+		return head->prev->value;
 	}
-	return head->prev->value;
+	else if (head)
+	{
+		return head->value;
+	}
 }
 
 template<class T>

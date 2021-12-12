@@ -19,7 +19,7 @@ public:
 	Array(const Array&);
 	~Array();
 
-	void push(T);
+	void push(const T&);
 	void deleteByIndex(size_t);
 	void sort(int (*comp)(const T&, const T&), size_t, size_t);
 
@@ -103,7 +103,7 @@ inline Array<T>::~Array()
 }
 
 template<class T>
-inline void Array<T>::push(T element)
+inline void Array<T>::push(const T& element)
 {
 	if (m_capacity <= m_size)
 	{
@@ -117,7 +117,7 @@ inline void Array<T>::deleteByIndex(size_t index)
 {
 	if (index > 0 && index < m_size)
 	{
-		for (size_t i = index; i <m_size - 1; i++)
+		for (size_t i = index; i < m_size - 1; i++)
 		{
 			data[i] = data[i + 1];
 		}
@@ -134,14 +134,14 @@ inline void Array<T>::sort(int(*comp)(const T&, const T&), size_t left, size_t r
 	{
 		while (comp(data[i], p) < 0) i++;
 		while (comp(data[j], p) > 0) j--;
-		if (i <= j)
+		if (i < j)
 		{
 			T temp = data[i];
 			data[i] = data[j];
 			data[j] = temp;
-			i++;
-			j--;
 		}
+		i++;
+		j--;
 	}
 
 	if (j > left) sort(comp, left, j);

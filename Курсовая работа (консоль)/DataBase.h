@@ -17,6 +17,8 @@ public:
 
 	void read();
 	void write() const;
+	void push(const T&); // поменять при отмене действий
+	void sort(int(*comp)(const T&, const T&));
 
 	T* find(const T& src, int(*comp)(const T&, const T&));
 	
@@ -61,6 +63,18 @@ inline void DataBase<T>::write() const
 	{
 		std::cerr << "Failed to save file!\a" << std::endl;
 	}
+}
+
+template<class T>
+inline void DataBase<T>::push(const T& element)
+{
+	data.push(element);
+}
+
+template<class T>
+inline void DataBase<T>::sort(int(*comp)(const T&, const T&))
+{
+	data.sort(comp, 0, data.size() - 1);
 }
 
 template<class T>

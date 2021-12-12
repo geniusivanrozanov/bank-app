@@ -79,11 +79,14 @@ template<class T>
 inline std::ostream& operator<<(std::ostream& out, const DataBase<T>& db)
 {
 	size_t i;
-	for (i = 0; i < db.data.size() - 1; i++)
+	if (db.data.size())
 	{
-		out << db.data[i] << std::endl;
+		for (i = 0; i < db.data.size() - 1; i++)
+		{
+			out << db.data[i] << std::endl;
+		}
+		out << db.data[i];
 	}
-	out << db.data[i];
 	return out;
 }
 

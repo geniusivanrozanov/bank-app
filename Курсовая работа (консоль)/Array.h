@@ -5,10 +5,10 @@ class Array
 {
 private:
 	T* data;
-	size_t m_size;
-	size_t m_capacity;
+	int m_size;
+	int m_capacity;
 
-	static size_t max_size();
+	static int max_size();
 
 	T* allocate();
 	T* reallocate();
@@ -20,25 +20,25 @@ public:
 	~Array();
 
 	void push(const T&);
-	void deleteByIndex(size_t);
-	void sort(int (*comp)(const T&, const T&), size_t, size_t);
+	void deleteByIndex(int);
+	void sort(int (*comp)(const T&, const T&), int, int);
 
-	size_t size() const;
-	size_t capacity() const;
+	int size() const;
+	int capacity() const;
 
 	int indexOf(const T&) const;
 
 	T* operator()(const T&, int (*comp)(const T&, const T&));
 	T* find(const T&, int (*comp)(const T&, const T&));
 
-	T& operator[](size_t);
-	const T& operator[](size_t) const;
+	T& operator[](int);
+	const T& operator[](int) const;
 };
 
 template<class T>
-inline size_t Array<T>::max_size()
+inline int Array<T>::max_size()
 {
-	return std::numeric_limits<size_t>::max();
+	return std::numeric_limits<int>::max();
 }
 
 template<class T>
@@ -70,7 +70,7 @@ inline T* Array<T>::reallocate()
 	T* temp_data = allocate();
 	if (data)
 	{
-		for (size_t i = 0; i < m_size; i++)
+		for (int i = 0; i < m_size; i++)
 		{
 			temp_data[i] = data[i];
 		}
@@ -90,7 +90,7 @@ inline Array<T>::Array(const Array& src)
 	: m_size(src.m_size), m_capacity(src.m_size)
 {
 	this->data = this->allocate();
-	for (size_t i = 0; i < m_size; i++)
+	for (int i = 0; i < m_size; i++)
 	{
 		this->data[i] = src.data();
 	}
@@ -113,11 +113,11 @@ inline void Array<T>::push(const T& element)
 }
 
 template<class T>
-inline void Array<T>::deleteByIndex(size_t index)
+inline void Array<T>::deleteByIndex(int index)
 {
 	if (index > 0 && index < m_size)
 	{
-		for (size_t i = index; i < m_size - 1; i++)
+		for (int i = index; i < m_size - 1; i++)
 		{
 			data[i] = data[i + 1];
 		}
@@ -125,9 +125,9 @@ inline void Array<T>::deleteByIndex(size_t index)
 }
 
 template<class T>
-inline void Array<T>::sort(int(*comp)(const T&, const T&), size_t left, size_t right)
+inline void Array<T>::sort(int(*comp)(const T&, const T&), int left, int right)
 {
-	size_t i = left, j = right;
+	int i = left, j = right;
 	T p = data[(i + j) / 2];
 
 	while (i < j)
@@ -149,13 +149,13 @@ inline void Array<T>::sort(int(*comp)(const T&, const T&), size_t left, size_t r
 }
 
 template<class T>
-inline size_t Array<T>::size() const
+inline int Array<T>::size() const
 {
 	return m_size;
 }
 
 template<class T>
-inline size_t Array<T>::capacity() const
+inline int Array<T>::capacity() const
 {
 	return m_capacity;
 }
@@ -197,13 +197,13 @@ inline T* Array<T>::find(const T& src, int(*comp)(const T&, const T&))
 }
 
 template<class T>
-inline T& Array<T>::operator[](size_t index)
+inline T& Array<T>::operator[](int index)
 {
 	return data[index];
 }
 
 template<class T>
-inline const T& Array<T>::operator[](size_t index) const
+inline const T& Array<T>::operator[](int index) const
 {
 	return data[index];
 }

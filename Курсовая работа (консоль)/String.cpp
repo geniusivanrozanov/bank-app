@@ -7,7 +7,7 @@ char* String::allocate()
 
 char* String::reallocate()
 {
-	m_capacity = m_capacity * 1.5 + 1;
+	m_capacity = m_capacity + m_capacity / 2 + 1;
 	char* temp_str = allocate();
 	strcpy_s(temp_str, m_capacity * sizeof(char), str);
 	destroy();

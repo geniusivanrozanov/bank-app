@@ -24,8 +24,9 @@ public:
 	int size() const;
 	int capacity() const;
 	int indexOf(const T&, int (*comp)(const T&, const T&)) const;
-	int operator()(const T&, int (*comp)(const T&, const T&));
+	int operator()(const T&, int (*comp)(const T&, const T&)) const;
 
+	T& at(int);
 	T& operator[](int);
 	const T& operator[](int) const;
 };
@@ -48,7 +49,7 @@ inline void Array<T>::destroy()
 template<class T>
 inline T* Array<T>::reallocate()
 {
-	m_capacity = m_capacity * 1.5 + 1;
+	m_capacity = m_capacity + m_capacity / 2 + 1;
 	if (m_capacity < 0)
 	{
 		m_capacity = std::numeric_limits<int>::max();
@@ -108,11 +109,19 @@ inline void Array<T>::deleteByIndex(int index)
 			data[i] = data[i + 1];
 		}
 	}
+	else
+	{
+		throw "Out of range";
+	}
 }
 
 template<class T>
 inline void Array<T>::sort(int(*comp)(const T&, const T&), int left, int right)
 {
+	if (left < 0 || right >= size())
+	{
+		throw "Out of range";
+	}
 	int i = left, j = right;
 	T p = data[(i + j) / 2];
 
@@ -162,25 +171,23 @@ inline int Array<T>::indexOf(const T& src, int (*comp)(const T&, const T&)) cons
 }
 
 template<class T>
-inline int Array<T>::operator()(const T& src, int(*comp)(const T&, const T&))
+inline int Array<T>::operator()(const T& src, int(*comp)(const T&, const T&)) const
 {
 	return indexOf(src, comp);
 }
 
-//template<class T>
-//inline T* Array<T>::find(const T& src, int(*comp)(const T&, const T&))
-//{
-//	int index = m_size - 1;
-//	while (index >= 0)
-//	{
-//		if (comp(data[index], src) == 0)
-//		{
-//			break;
-//		}
-//		index--;
-//	}
-//	return (index >= 0 ? data + index : nullptr);
-//}
+template<class T>
+inline T& Array<T>::at(int index)
+{
+	if (index >= 0 && index < m_size)
+	{
+		return data[index];
+	}
+	else
+	{
+		throw "Out of range";
+	}
+}
 
 template<class T>
 inline T& Array<T>::operator[](int index)

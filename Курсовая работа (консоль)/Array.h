@@ -8,8 +8,6 @@ private:
 	int m_size;
 	int m_capacity;
 
-	static int max_size();
-
 	T* allocate();
 	T* reallocate();
 
@@ -25,21 +23,12 @@ public:
 
 	int size() const;
 	int capacity() const;
-
-	int indexOf(const T&) const;
-
-	T* operator()(const T&, int (*comp)(const T&, const T&));
-	T* find(const T&, int (*comp)(const T&, const T&));
+	int indexOf(const T&, int (*comp)(const T&, const T&)) const;
+	int operator()(const T&, int (*comp)(const T&, const T&));
 
 	T& operator[](int);
 	const T& operator[](int) const;
 };
-
-template<class T>
-inline int Array<T>::max_size()
-{
-	return std::numeric_limits<int>::max();
-}
 
 template<class T>
 inline T* Array<T>::allocate()
@@ -59,13 +48,10 @@ inline void Array<T>::destroy()
 template<class T>
 inline T* Array<T>::reallocate()
 {
-	if (m_capacity * 1.5 + 1 <= max_size())
+	m_capacity = m_capacity * 1.5 + 1;
+	if (m_capacity < 0)
 	{
-		m_capacity = m_capacity * 1.5 + 1;
-	}
-	else
-	{
-		m_capacity = max_size();
+		m_capacity = std::numeric_limits<int>::max();
 	}
 	T* temp_data = allocate();
 	if (data)
@@ -161,12 +147,12 @@ inline int Array<T>::capacity() const
 }
 
 template<class T>
-inline int Array<T>::indexOf(const T& src) const
+inline int Array<T>::indexOf(const T& src, int (*comp)(const T&, const T&)) const
 {
 	int index = m_size - 1;
 	while (index >= 0)
 	{
-		if (data[index] == src)
+		if (!comp(data[index], src))
 		{
 			break;
 		}
@@ -176,25 +162,25 @@ inline int Array<T>::indexOf(const T& src) const
 }
 
 template<class T>
-inline T* Array<T>::operator()(const T& src, int(*comp)(const T&, const T&))
+inline int Array<T>::operator()(const T& src, int(*comp)(const T&, const T&))
 {
-	return find(src, comp);
+	return indexOf(src, comp);
 }
 
-template<class T>
-inline T* Array<T>::find(const T& src, int(*comp)(const T&, const T&))
-{
-	int index = m_size - 1;
-	while (index >= 0)
-	{
-		if (comp(data[index], src) == 0)
-		{
-			break;
-		}
-		index--;
-	}
-	return (index >= 0 ? data + index : nullptr);
-}
+//template<class T>
+//inline T* Array<T>::find(const T& src, int(*comp)(const T&, const T&))
+//{
+//	int index = m_size - 1;
+//	while (index >= 0)
+//	{
+//		if (comp(data[index], src) == 0)
+//		{
+//			break;
+//		}
+//		index--;
+//	}
+//	return (index >= 0 ? data + index : nullptr);
+//}
 
 template<class T>
 inline T& Array<T>::operator[](int index)

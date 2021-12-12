@@ -20,9 +20,11 @@ public:
 	void push(const T&); // поменять при отмене действий
 	void sort(int(*comp)(const T&, const T&));
 
-	T* find(const T& src, int(*comp)(const T&, const T&));
-	
-	T& operator[](size_t);
+	int indexOf(const T& src, int(*comp)(const T&, const T&)) const;
+	int size() const;
+
+	T& operator[](int);
+
 	template<class T>
 	friend std::ostream& operator<< (std::ostream&, const DataBase<T>&);
 	template<class T>
@@ -46,7 +48,7 @@ inline void DataBase<T>::read()
 	}
 	else
 	{
-		std::cerr << "Failed to open file!\a" << std::endl;
+		throw "Failed to open file!";
 	}
 }
 
@@ -61,7 +63,7 @@ inline void DataBase<T>::write() const
 	}
 	else
 	{
-		std::cerr << "Failed to save file!\a" << std::endl;
+		throw "Failed to save file!";
 	}
 }
 
@@ -78,23 +80,29 @@ inline void DataBase<T>::sort(int(*comp)(const T&, const T&))
 }
 
 template<class T>
-inline T* DataBase<T>::find(const T& src, int(*comp)(const T&, const T&))
+inline int DataBase<T>::indexOf(const T& src, int(*comp)(const T&, const T&)) const
 {
-	return data.find(src, comp);
+	return data(src, comp);
 }
 
 template<class T>
-inline T& DataBase<T>::operator[](size_t index)
+inline int DataBase<T>::size() const
 {
-	return data[index];
+	return data.size();
+}
+
+template<class T>
+inline T& DataBase<T>::operator[](int index)
+{
+	return data.at(index);
 }
 
 template<class T>
 inline std::ostream& operator<<(std::ostream& out, const DataBase<T>& db)
 {
-	size_t i;
 	if (db.data.size())
 	{
+		int i;
 		for (i = 0; i < db.data.size() - 1; i++)
 		{
 			out << db.data[i] << std::endl;

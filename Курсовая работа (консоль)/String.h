@@ -34,6 +34,9 @@ public:
 
 	static int compare(const String&, const String&);
 
+	char& operator[](size_t);
+	char operator[](size_t) const;
+
 	bool operator==(const String&);
 	bool operator==(const char*);
 

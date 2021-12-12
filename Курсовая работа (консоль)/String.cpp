@@ -110,6 +110,7 @@ String& String::operator+=(const String& src)
 String& String::operator+=(const char ch)
 {
 	push(ch);
+	return *this;
 }
 
 String& String::operator=(const String& src)
@@ -129,6 +130,16 @@ String& String::operator=(const String& src)
 int String::compare(const String& str1, const String& str2)
 {
 	return strcmp(str1, str2);
+}
+
+char& String::operator[](size_t index)
+{
+	return str[index];
+}
+
+char String::operator[](size_t index) const
+{
+	return str[index];
 }
 
 bool String::operator==(const String& src)

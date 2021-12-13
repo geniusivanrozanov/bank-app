@@ -132,6 +132,11 @@ int String::compare(const String& str1, const String& str2)
 	return strcmp(str1, str2);
 }
 
+int String::compare(String* const& str1, String* const& str2)
+{
+	return strcmp(*str1, *str2);
+}
+
 char& String::operator[](size_t index)
 {
 	return str[index];

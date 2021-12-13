@@ -23,6 +23,7 @@ public:
 
 	int size() const;
 	int capacity() const;
+	int indexOf(const T&) const;
 	int indexOf(const T&, int (*comp)(const T&, const T&)) const;
 	int operator()(const T&, int (*comp)(const T&, const T&)) const;
 
@@ -108,6 +109,7 @@ inline void Array<T>::deleteByIndex(int index)
 		{
 			data[i] = data[i + 1];
 		}
+		m_size--;
 	}
 	else
 	{
@@ -153,6 +155,21 @@ template<class T>
 inline int Array<T>::capacity() const
 {
 	return m_capacity;
+}
+
+template<class T>
+inline int Array<T>::indexOf(const T& src) const
+{
+	int index = m_size - 1;
+	while (index >= 0)
+	{
+		if (data[index] == src)
+		{
+			break;
+		}
+		index--;
+	}
+	return index;
 }
 
 template<class T>

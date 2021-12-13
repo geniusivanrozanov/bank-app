@@ -56,7 +56,10 @@ public:
 
 	T popUp();
 	T popDown();
-	T peek();
+	T peek() const;
+
+	bool canPopUp() const;
+	bool canPopDown() const;
 };
 
 template<class T>
@@ -123,7 +126,7 @@ inline T Stack<T>::popUp()
 	if (head && head->prev)
 	{
 		head = head->prev;
-		return head->next->value;
+		return head->value;
 	}
 	else if (head)
 	{
@@ -146,7 +149,19 @@ inline T Stack<T>::popDown()
 }
 
 template<class T>
-inline T Stack<T>::peek()
+inline T Stack<T>::peek() const
 {
 	return head->value;
+}
+
+template<class T>
+inline bool Stack<T>::canPopUp() const
+{
+	return head->prev;
+}
+
+template<class T>
+inline bool Stack<T>::canPopDown() const
+{
+	return head->next;
 }

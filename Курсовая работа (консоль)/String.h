@@ -33,6 +33,7 @@ public:
 	String& operator=(const String&);
 
 	static int compare(const String&, const String&);
+	static int compare(String *const&, String* const&);
 
 	char& operator[](size_t);
 	char operator[](size_t) const;

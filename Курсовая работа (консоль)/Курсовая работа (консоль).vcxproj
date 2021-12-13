@@ -147,6 +147,7 @@
     <ClInclude Include="DataBase.h" />
     <ClInclude Include="Stack.h" />
     <ClInclude Include="String.h" />
+    <ClInclude Include="UndoRedo.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

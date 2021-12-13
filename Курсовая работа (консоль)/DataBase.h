@@ -5,25 +5,32 @@
 #include <fstream>
 #include "String.h"
 #include "Array.h"
+#include "UndoRedo.h"
 
 template<class T>
 class DataBase
 {
 private:
-	Array<T> data;
+	Array<T*> data;
+	UndoRedo<T*> undoredo;
 	const String FILE_NAME;
 public:
 	DataBase(const String& file);
 
 	void read();
 	void write() const;
-	void push(const T&); // поменять при отмене действий
-	void sort(int(*comp)(const T&, const T&));
+	//void push(T*); // поменять при отмене действий
+	void sort(int(*comp)(T *const &, T* const&));
+	void add(T*);
+	void del(T*);
+	void change(T*, T*);
+	void undo();
+	void redo();
 
-	int indexOf(const T& src, int(*comp)(const T&, const T&)) const;
+	int indexOf(T* const&, int(*comp)(T* const&, T* const&)) const;
 	int size() const;
 
-	T& operator[](int);
+	T* at(int);
 
 	template<class T>
 	friend std::ostream& operator<< (std::ostream&, const DataBase<T>&);
@@ -33,7 +40,7 @@ public:
 
 template<class T>
 inline DataBase<T>::DataBase(const String& file)
-	: FILE_NAME(file)
+	: FILE_NAME(file), undoredo(data)
 {
 }
 
@@ -68,21 +75,45 @@ inline void DataBase<T>::write() const
 }
 
 template<class T>
-inline void DataBase<T>::push(const T& element)
-{
-	data.push(element);
-}
-
-template<class T>
-inline void DataBase<T>::sort(int(*comp)(const T&, const T&))
+inline void DataBase<T>::sort(int(*comp)(T* const&, T* const&))
 {
 	data.sort(comp, 0, data.size() - 1);
 }
 
 template<class T>
-inline int DataBase<T>::indexOf(const T& src, int(*comp)(const T&, const T&)) const
+inline void DataBase<T>::add(T* element)
 {
-	return data(src, comp);
+	undoredo.add(element);
+}
+
+template<class T>
+inline void DataBase<T>::del(T* element)
+{
+	undoredo.del(element);
+}
+
+template<class T>
+inline void DataBase<T>::change(T* old_element, T* new_element)
+{
+	undoredo.change(old_element, new_element);
+}
+
+template<class T>
+inline void DataBase<T>::undo()
+{
+	undoredo.undo();
+}
+
+template<class T>
+inline void DataBase<T>::redo()
+{
+	undoredo.redo();
+}
+
+template<class T>
+inline int DataBase<T>::indexOf(T* const& src, int(*comp)(T* const&, T* const&)) const
+{
+	return data.indexOf(src, comp);
 }
 
 template<class T>
@@ -92,7 +123,7 @@ inline int DataBase<T>::size() const
 }
 
 template<class T>
-inline T& DataBase<T>::operator[](int index)
+inline T* DataBase<T>::at(int index)
 {
 	return data.at(index);
 }
@@ -105,9 +136,9 @@ inline std::ostream& operator<<(std::ostream& out, const DataBase<T>& db)
 		int i;
 		for (i = 0; i < db.data.size() - 1; i++)
 		{
-			out << db.data[i] << std::endl;
+			out << *db.data[i] << std::endl;
 		}
-		out << db.data[i];
+		out << *db.data[i];
 	}
 	return out;
 }
@@ -115,12 +146,13 @@ inline std::ostream& operator<<(std::ostream& out, const DataBase<T>& db)
 template<class T>
 inline std::istream& operator>>(std::istream& in, DataBase<T>& db)
 {
-	T element;
 	in.peek();
 	while (!in.eof())
 	{
-		in >> element;
+		T* element = new T;
+		in >> *element;
 		db.data.push(element);
 	}
 	return in;
 }
+

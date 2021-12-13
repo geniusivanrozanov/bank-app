@@ -32,25 +32,31 @@ String generateSalt(int salt_size)
 
 int main()
 {
-	std::vector<int> a;
-	a.push_back(1);
-	//srand(time(NULL));
 	DataBase<String> db("temp.txt");
-	db.read();
-	//std::cout << db << std::endl << std::endl;
-	for (size_t i = 0; i < 5; i++)
+	//db.read();
+	for (size_t i = 0; i < 3; i++)
 	{
-		db.push(generateSalt(5));
+		db.add(new String(generateSalt(5)));
 	}
-	for (size_t i = 0; i < 5; i++)
-	{
-		std::cout << i << ": " << db[i] << "\t";
-	}
-	std::cout << std::endl << std::endl;
-	db.sort(String::compare);
+	std::cout << db << std::endl << std::endl;
 
-	std::cout << db << std::endl;
 
-	db.write();
+	db.undo();
+	std::cout << db << std::endl << std::endl;
+
+	db.undo();
+	std::cout << db << std::endl << std::endl;
+
+	db.undo();
+	std::cout << db << std::endl << std::endl;
+
+	db.undo();
+	std::cout << db << std::endl << std::endl;
+
+	db.redo();
+	std::cout << db << std::endl << std::endl;
+
+	db.redo();
+	std::cout << db << std::endl << std::endl;
 	return 0;
 }

@@ -34,6 +34,7 @@ public:
 
 	static int compare(const String&, const String&);
 	static int compare(String *const&, String* const&);
+	static String random(int);
 
 	char& operator[](size_t);
 	char operator[](size_t) const;

@@ -137,6 +137,22 @@ int String::compare(String* const& str1, String* const& str2)
 	return strcmp(*str1, *str2);
 }
 
+String String::random(int salt_size)
+{
+	String salt;
+	for (int i = 0; i < salt_size; i++)
+	{
+		int randomChar = rand() % (26 + 26 + 10);
+		if (randomChar < 26)
+			salt.push('a' + randomChar);
+		else if (randomChar < 26 + 26)
+			salt.push('A' + randomChar - 26);
+		else
+			salt.push('0' + randomChar - 26 - 26);
+	}
+	return salt;
+}
+
 char& String::operator[](size_t index)
 {
 	return str[index];

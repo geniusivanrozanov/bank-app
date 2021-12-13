@@ -16,10 +16,10 @@ private:
 	const String FILE_NAME;
 public:
 	DataBase(const String& file);
+	~DataBase();
 
 	void read();
 	void write() const;
-	//void push(T*); // поменять при отмене действий
 	void sort(int(*comp)(T *const &, T* const&));
 	void add(T*);
 	void del(T*);
@@ -42,6 +42,15 @@ template<class T>
 inline DataBase<T>::DataBase(const String& file)
 	: FILE_NAME(file), undoredo(data)
 {
+}
+
+template<class T>
+inline DataBase<T>::~DataBase()
+{
+	for (int i = 0; i < data.size(); i++)
+	{
+		delete data[i];
+	}
 }
 
 template<class T>

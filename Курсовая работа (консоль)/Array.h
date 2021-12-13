@@ -103,7 +103,7 @@ inline void Array<T>::push(const T& element)
 template<class T>
 inline void Array<T>::deleteByIndex(int index)
 {
-	if (index > 0 && index < m_size)
+	if (index >= 0 && index < m_size)
 	{
 		for (int i = index; i < m_size - 1; i++)
 		{

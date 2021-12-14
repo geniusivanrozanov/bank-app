@@ -1,11 +1,12 @@
 #pragma once
-#include <map>
-#include <string>
 #include <iostream>
 #include <fstream>
 #include "String.h"
 #include "Array.h"
 #include "UndoRedo.h"
+#include "Account.h"
+#include "BankAccount.h"
+#include "Identifier.h"
 
 template<class T>
 class DataBase
@@ -20,7 +21,7 @@ public:
 
 	void read();
 	void write() const;
-	void sort(int(*comp)(T *const &, T* const&));
+	void sort(int(*comp)(T* const&, T* const&));
 	void add(T*);
 	void del(T*);
 	void change(T*, T*);
@@ -67,6 +68,8 @@ inline void DataBase<T>::read()
 		throw "Failed to open file!";
 	}
 }
+
+
 
 template<class T>
 inline void DataBase<T>::write() const
@@ -165,3 +168,40 @@ inline std::istream& operator>>(std::istream& in, DataBase<T>& db)
 	return in;
 }
 
+template<>
+inline std::istream& operator>>(std::istream& in, DataBase<Account>& db)
+{
+	in.peek();
+	while (!in.eof())
+	{
+		int id;
+		int status;
+		String login;
+		String password;
+		in >> id >> login >> password >> status;
+		Account* element = new Account(id, static_cast<Status>(status), login, password);
+		db.data.push(element);
+	}
+	db.sort(Account::compareId);
+	Identifier<Account>::setMaxId(db.at(db.size() - 1)->getId());
+	return in;
+}
+
+template<>
+inline std::istream& operator>>(std::istream& in, DataBase<BankAccount>& db)
+{
+	in.peek();
+	while (!in.eof())
+	{
+		int id;
+		int client_id;
+		unsigned int cash;
+		bool status;
+		in >> id >> client_id >> cash >> status;
+		BankAccount* element = new BankAccount(id, client_id, cash, status);
+		db.data.push(element);
+	}
+	db.sort(BankAccount::compareId);
+	Identifier<BankAccount>::setMaxId(db.at(db.size() - 1)->getId());
+	return in;
+}

@@ -15,33 +15,39 @@ int Account::compareLogins(Account* const& src1, Account* const& src2)
     return String::compare(src1->login, src2->login);
 }
 
-
-
 int Account::compareId(Account* const& src1, Account* const& src2)
 {
     return src1->id - src2->id;
 }
 
-void Account::setId(int)
+Account::Account(int id, Status status, const String& login, const String& password)
+    : id(id), status(status), login(login), password(password)
 {
 }
 
-void Account::setLogin(const String&)
+void Account::setLogin(const String& new_login)
 {
+    login = new_login;
 }
 
-void Account::setPassword(const String&)
+void Account::setPassword(const String& new_password)
 {
+    password = new_password;
+}
+
+int Account::getId()
+{
+    return id;
+}
+
+Status Account::getStatus()
+{
+    return status;
 }
 
 void Account::print(std::ostream& out) const
 {
-    out << id << " " << login << " " << password << " " << status;
-}
-
-void Account::read(std::istream& in)
-{
-    in >> id >> login >> password >> status;
+    out << id <<  " " << login << " " << password << " " << status;
 }
 
 std::ostream& operator<<(std::ostream& out, const Account& src)
@@ -49,22 +55,3 @@ std::ostream& operator<<(std::ostream& out, const Account& src)
     src.print(out);
     return out;
 }
-
-std::istream& operator>>(std::istream& in, Account& src)
-{
-    src.read(in);
-    return in;
-}
-
-void Account::setFreeId(const Account& src)
-{
-    Account::free_id = src.id + 1;
-}
-
-int Account::getFreeId()
-{
-    return Account::free_id++;
-}
-
-int Account::free_id = 0;
-

@@ -1,25 +1,30 @@
 #pragma once
 #include "String.h"
-#include "DataBase.h"
 #include <iostream>
+
+enum Status
+{
+	BLOCKED = -1,
+	CLIENT,
+	ADMIN,
+};
 
 class Account
 {
 private:
-	int id;
+	const int id;
+	const Status status;
+
 	String login;
 	String password;
-	int status;
-
-	static int free_id;
 public:
-	static int getFreeId();
-	static void setFreeId(const Account&);
+	Account(int, Status, const String&, const String&);
 
-	void setId(int);
 	void setLogin(const String&);
 	void setPassword(const String&);
-	void setStatus(int);
+
+	int getId();
+	Status getStatus();
 
 	bool auth(const String&, const String&);
 
@@ -28,8 +33,6 @@ public:
 	static int compareId(Account *const&, Account *const&);
 
 	virtual void print(std::ostream&) const;
-	virtual void read(std::istream&);
 
 	friend std::ostream& operator<<(std::ostream&, const Account&);
-	friend std::istream& operator>>(std::istream&, Account&);
 };

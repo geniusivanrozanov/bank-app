@@ -139,15 +139,28 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Account.cpp" />
+    <ClCompile Include="BankAccount.cpp" />
+    <ClCompile Include="Date.cpp" />
+    <ClCompile Include="Header.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="String.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Account.h" />
+    <ClInclude Include="Actions.h" />
     <ClInclude Include="Array.h" />
+    <ClInclude Include="BankAccount.h" />
     <ClInclude Include="DataBase.h" />
+    <ClInclude Include="Date.h" />
+    <ClInclude Include="Identifier.h" />
+    <ClInclude Include="resource.h" />
     <ClInclude Include="Stack.h" />
     <ClInclude Include="String.h" />
     <ClInclude Include="UndoRedo.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="Курсовая работа (консоль).rc" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

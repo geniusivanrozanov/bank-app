@@ -13,8 +13,12 @@ Date::Date()
 }
 
 Date::Date(int year, int month, int day)
-	: year(year), month(month), day(day)
 {
+	this->month = month % 12 - month / 12;
+	this->day = day % daysInMon[this->month - 1];
+	this->month += day / daysInMon[this->month - 1];
+	this->month = this->month % 12 - this->month / 12;
+	this->year = year + this->month / 12 + month / 12;
 }
 
 int Date::getYear()

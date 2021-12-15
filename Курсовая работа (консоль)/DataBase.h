@@ -193,8 +193,11 @@ inline std::istream& operator>>(std::istream& in, DataBase<Account>& db)
 		}
 		db.data.push(element);
 	}
-	db.sort(Account::compareId);
-	Identifier<Account>::setMaxId(db.at(db.size() - 1)->getId());
+	if (db.size() > 0)
+	{
+		db.sort(Account::compareId);
+		Identifier<Account>::setMaxId(db.at(db.size() - 1)->getId());
+	}
 	return in;
 }
 
@@ -214,7 +217,10 @@ inline std::istream& operator>>(std::istream& in, DataBase<BankAccount>& db)
 		in >> *element;
 		db.data.push(element);
 	}
-	db.sort(BankAccount::compareId);
-	Identifier<BankAccount>::setMaxId(db.at(db.size() - 1)->getId());
+	if (db.size() > 0)
+	{
+		db.sort(BankAccount::compareId);
+		Identifier<BankAccount>::setMaxId(db.at(db.size() - 1)->getId());
+	}
 	return in;
 }

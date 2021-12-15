@@ -11,7 +11,7 @@ public:
 };
 
 template<class T>
-int Identifier<T>::id = 0;
+int Identifier<T>::id = 100000;
 
 template<class T>
 void Identifier<T>::setMaxId(int new_id)

@@ -18,16 +18,14 @@ int comp(const int& a, const int& b)
 
 int main()
 {
-	Date t, tt;
-	std::cin >> tt;
-	std::cout << int(t - tt) << std::endl;
-	/*DataBase<Account> accounts("files/accounts.txt");
+	//std::cout << sizeof(String) << std::endl;
+	DataBase<Account> accounts("files/accounts.txt");
 	accounts.read();
 	std::cout << Identifier<Account>::getFreeId() << std::endl;
 	std::cout << Identifier<Account>::getFreeId() << std::endl;
 	std::cout << Identifier<Account>::getFreeId() << std::endl;
 	std::cout << Identifier<Account>::getFreeId() << std::endl;
-	accounts.write();*/
+	accounts.write();
 	/*DataBase<String> t("temp.txt");
 	t.read();*/
 	//std::cout << BANK << std::endl;

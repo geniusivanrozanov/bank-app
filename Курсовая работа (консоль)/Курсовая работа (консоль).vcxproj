@@ -140,8 +140,11 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Account.cpp" />
+    <ClCompile Include="Admin.cpp" />
     <ClCompile Include="BankAccount.cpp" />
+    <ClCompile Include="Client.cpp" />
     <ClCompile Include="Date.cpp" />
+    <ClCompile Include="Deposit.cpp" />
     <ClCompile Include="Header.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="String.cpp" />
@@ -149,10 +152,13 @@
   <ItemGroup>
     <ClInclude Include="Account.h" />
     <ClInclude Include="Actions.h" />
+    <ClInclude Include="Admin.h" />
     <ClInclude Include="Array.h" />
     <ClInclude Include="BankAccount.h" />
+    <ClInclude Include="Client.h" />
     <ClInclude Include="DataBase.h" />
     <ClInclude Include="Date.h" />
+    <ClInclude Include="Deposit.h" />
     <ClInclude Include="Identifier.h" />
     <ClInclude Include="resource.h" />
     <ClInclude Include="Stack.h" />

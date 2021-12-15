@@ -1,6 +1,6 @@
 #include "Date.h"
 
-const int Date::daysInMon[12] = { 0, 31, 59, 90, 120, 151, 181, 212, 243, 273, 304, 334 };
+const int Date::daysInMon[12] = { 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 30 };
 
 Date::Date()
 	: year(0), month(0), day(0)
@@ -12,33 +12,42 @@ Date::Date()
 	day = tm.tm_mday;
 }
 
-Date::Date(unsigned int year, unsigned int month, unsigned int day)
+Date::Date(int year, int month, int day)
 	: year(year), month(month), day(day)
 {
 }
 
-unsigned int Date::getYear()
+int Date::getYear()
 {
 	return year;
 }
 
-unsigned int Date::getMonth()
+int Date::getMonth()
 {
 	return month;
 }
 
-unsigned int Date::getDay()
+int Date::getDay()
 {
 	return day;
 }
 
-int Date::operator-(const Date& dt)
+Date Date::operator-(const Date& dt)
+{
+	return Date(year - dt.year, month - dt.month, day - dt.day);
+}
+
+Date::operator int()
 {
 	int res = 0;
-	res += day - dt.day;
-	res += daysInMon[month - dt.month];
-	res += (year - dt.year) + (year - dt.year) / 4;
+	res += day + year * 365 + year / 4;
+	for (int i = 0; i < month; i++) res += daysInMon[i];
 	return res;
+}
+
+Date Date::operator+(const Date& dt)
+{
+	return Date(year + dt.year, month + dt.month, day + dt.day);
 }
 
 std::ostream& operator<<(std::ostream& out, const Date& dt)

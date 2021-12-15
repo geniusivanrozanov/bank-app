@@ -5,7 +5,10 @@
 #include "Array.h"
 #include "UndoRedo.h"
 #include "Account.h"
+#include "Admin.h"
+#include "Client.h"
 #include "BankAccount.h"
+#include "Deposit.h"
 #include "Identifier.h"
 
 template<class T>
@@ -179,7 +182,15 @@ inline std::istream& operator>>(std::istream& in, DataBase<Account>& db)
 		String login;
 		String password;
 		in >> id >> login >> password >> status;
-		Account* element = new Account(id, static_cast<Status>(status), login, password);
+		Account* element;
+		if (status == ADMIN)
+		{
+			element = new Admin(id, static_cast<Status>(status), login, password);
+		}
+		else
+		{
+			element = new Client(id, static_cast<Status>(status), login, password);
+		}
 		db.data.push(element);
 	}
 	db.sort(Account::compareId);
@@ -193,12 +204,14 @@ inline std::istream& operator>>(std::istream& in, DataBase<BankAccount>& db)
 	in.peek();
 	while (!in.eof())
 	{
-		int id;
-		int client_id;
-		unsigned int cash;
-		bool status;
-		in >> id >> client_id >> cash >> status;
-		BankAccount* element = new BankAccount(id, client_id, cash, status);
+		BankAccount* element;
+		int type;
+		in >> type;
+		if (type == 0)
+			element = new BankAccount;
+		else
+			element = new DepLoan(type);
+		in >> *element;
 		db.data.push(element);
 	}
 	db.sort(BankAccount::compareId);

@@ -20,7 +20,7 @@ int main()
 {
 	Date t, tt;
 	std::cin >> tt;
-	std::cout << t - tt << std::endl;
+	std::cout << int(t - tt) << std::endl;
 	/*DataBase<Account> accounts("files/accounts.txt");
 	accounts.read();
 	std::cout << Identifier<Account>::getFreeId() << std::endl;
@@ -30,5 +30,6 @@ int main()
 	accounts.write();*/
 	/*DataBase<String> t("temp.txt");
 	t.read();*/
+	//std::cout << BANK << std::endl;
 	return 0;
 }

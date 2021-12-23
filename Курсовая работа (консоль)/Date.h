@@ -2,6 +2,7 @@
 #pragma warning(disable : 4996)
 #include <ctime>
 #include <istream>
+#include "String.h"
 
 class Date
 {
@@ -19,6 +20,7 @@ public:
 	Date operator-(const Date&);
 	Date operator+(const Date&);
 	operator int();
+	String toString() const;
 	friend std::ostream& operator<<(std::ostream&, const Date&);
 	friend std::istream& operator>>(std::istream&, Date&);
 };

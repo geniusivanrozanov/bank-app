@@ -7,11 +7,12 @@ class DepLoan : public BankAccount
 {
 private:
 	Date date_of_end;
-	int deposit_or_loan;
+	bool deposit_or_loan;
 public:
-	DepLoan(int);
+	DepLoan(bool, Date = Date());
 	virtual int type() const override;
 	virtual void print(std::ostream&) const override;
 	virtual void read(std::istream&) override;
+	virtual Vector<String> toArray() const override;
 };
 

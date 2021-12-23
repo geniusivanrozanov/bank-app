@@ -1,7 +1,8 @@
 #pragma once
+#include <initializer_list>
 
 template <class T>
-class Array
+class Vector
 {
 private:
 	T* data;
@@ -9,17 +10,19 @@ private:
 	int m_capacity;
 
 	T* allocate();
-	T* reallocate();
 
 	void destroy();
 public:
-	Array();
-	Array(const Array&);
-	~Array();
+	Vector();
+	Vector(const Vector&);
+	Vector(const std::initializer_list<T>&);
+	~Vector();
 
 	void push(const T&);
 	void deleteByIndex(int);
 	void sort(int (*comp)(const T&, const T&), int, int);
+	void reserve(int);
+	void reverse();
 
 	int size() const;
 	int capacity() const;
@@ -30,16 +33,17 @@ public:
 	T& at(int);
 	T& operator[](int);
 	const T& operator[](int) const;
+	Vector<T>& operator=(const Vector<T>&);
 };
 
 template<class T>
-inline T* Array<T>::allocate()
+inline T* Vector<T>::allocate()
 {
 	return new T[m_capacity];
 }
 
 template<class T>
-inline void Array<T>::destroy()
+inline void Vector<T>::destroy()
 {
 	if (data)
 	{
@@ -48,60 +52,53 @@ inline void Array<T>::destroy()
 }
 
 template<class T>
-inline T* Array<T>::reallocate()
-{
-	m_capacity = m_capacity + m_capacity / 2 + 1;
-	if (m_capacity < 0)
-	{
-		m_capacity = std::numeric_limits<int>::max();
-	}
-	T* temp_data = allocate();
-	if (data)
-	{
-		for (int i = 0; i < m_size; i++)
-		{
-			temp_data[i] = data[i];
-		}
-	}
-	destroy();
-	return temp_data;
-}
-
-template<class T>
-inline Array<T>::Array()
+inline Vector<T>::Vector()
 	:m_size(0), m_capacity(0), data(nullptr)
 {
 }
 
 template<class T>
-inline Array<T>::Array(const Array& src)
+inline Vector<T>::Vector(const Vector& src)
 	: m_size(src.m_size), m_capacity(src.m_size)
 {
 	this->data = this->allocate();
 	for (int i = 0; i < m_size; i++)
 	{
-		this->data[i] = src.data();
+		this->data[i] = src.data[i];
 	}
 }
 
 template<class T>
-inline Array<T>::~Array()
+Vector<T>::Vector(const std::initializer_list<T>& list)
+{
+	m_size = list.size();
+	m_capacity = m_size;
+	data = allocate();
+	int i = 0;
+	for (auto& element : list)
+	{
+		data[i++] = element;
+	}
+}
+
+template<class T>
+inline Vector<T>::~Vector()
 {
 	destroy();
 }
 
 template<class T>
-inline void Array<T>::push(const T& element)
+inline void Vector<T>::push(const T& element)
 {
 	if (m_capacity <= m_size)
 	{
-		data = reallocate();
+		reserve(m_capacity + m_capacity / 2 + 1);
 	}
 	data[m_size++] = element;
 }
 
 template<class T>
-inline void Array<T>::deleteByIndex(int index)
+inline void Vector<T>::deleteByIndex(int index)
 {
 	if (index >= 0 && index < m_size)
 	{
@@ -118,8 +115,9 @@ inline void Array<T>::deleteByIndex(int index)
 }
 
 template<class T>
-inline void Array<T>::sort(int(*comp)(const T&, const T&), int left, int right)
+inline void Vector<T>::sort(int(*comp)(const T&, const T&), int left, int right)
 {
+	if (m_size <= 0) return;
 	if (left < 0 || right >= size())
 	{
 		throw "Out of range";
@@ -146,19 +144,59 @@ inline void Array<T>::sort(int(*comp)(const T&, const T&), int left, int right)
 }
 
 template<class T>
-inline int Array<T>::size() const
+inline void Vector<T>::reserve(int new_capacity)
+{
+	if (new_capacity < 0)
+		throw "Bad capacity";
+	if (new_capacity < m_size)
+	{
+		m_size = new_capacity;
+	}
+	else if (new_capacity > 0)
+	{
+		m_capacity = new_capacity;
+		T* temp_data = allocate();
+		if (data)
+		{
+			for (int i = 0; i < m_size; i++)
+			{
+				temp_data[i] = data[i];
+			}
+		}
+		destroy();
+		data = temp_data;
+	}
+}
+
+template<class T>
+inline void Vector<T>::reverse()
+{
+	int i = 0;
+	int j = m_size - 1;
+	while (i < j)
+	{
+		T temp = data[i];
+		data[i] = data[j];
+		data[j] = temp;
+		i++;
+		j--;
+	}
+}
+
+template<class T>
+inline int Vector<T>::size() const
 {
 	return m_size;
 }
 
 template<class T>
-inline int Array<T>::capacity() const
+inline int Vector<T>::capacity() const
 {
 	return m_capacity;
 }
 
 template<class T>
-inline int Array<T>::indexOf(const T& src) const
+inline int Vector<T>::indexOf(const T& src) const
 {
 	int index = m_size - 1;
 	while (index >= 0)
@@ -173,7 +211,7 @@ inline int Array<T>::indexOf(const T& src) const
 }
 
 template<class T>
-inline int Array<T>::indexOf(const T& src, int (*comp)(const T&, const T&)) const
+inline int Vector<T>::indexOf(const T& src, int (*comp)(const T&, const T&)) const
 {
 	int index = m_size - 1;
 	while (index >= 0)
@@ -188,13 +226,13 @@ inline int Array<T>::indexOf(const T& src, int (*comp)(const T&, const T&)) cons
 }
 
 template<class T>
-inline int Array<T>::operator()(const T& src, int(*comp)(const T&, const T&)) const
+inline int Vector<T>::operator()(const T& src, int(*comp)(const T&, const T&)) const
 {
 	return indexOf(src, comp);
 }
 
 template<class T>
-inline T& Array<T>::at(int index)
+inline T& Vector<T>::at(int index)
 {
 	if (index >= 0 && index < m_size)
 	{
@@ -207,13 +245,27 @@ inline T& Array<T>::at(int index)
 }
 
 template<class T>
-inline T& Array<T>::operator[](int index)
+inline T& Vector<T>::operator[](int index)
 {
 	return data[index];
 }
 
 template<class T>
-inline const T& Array<T>::operator[](int index) const
+inline const T& Vector<T>::operator[](int index) const
 {
 	return data[index];
+}
+
+template<class T>
+inline Vector<T>& Vector<T>::operator=(const Vector<T>& src)
+{
+	destroy();
+	m_size = src.m_size;
+	m_capacity = src.m_size;
+	data = allocate();
+	for (int i = 0; i < src.m_size; i++)
+	{
+		data[i] = src.data[i];
+	}
+	return *this;
 }

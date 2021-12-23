@@ -14,11 +14,9 @@ Date::Date()
 
 Date::Date(int year, int month, int day)
 {
-	this->month = month % 12 - month / 12;
-	this->day = day % daysInMon[this->month - 1];
-	this->month += day / daysInMon[this->month - 1];
-	this->month = this->month % 12 - this->month / 12;
-	this->year = year + this->month / 12 + month / 12;
+	this->day = day;
+	this->month = month;
+	this->year = year;
 }
 
 int Date::getYear()
@@ -47,6 +45,17 @@ Date::operator int()
 	res += day + year * 365 + year / 4;
 	for (int i = 0; i < month; i++) res += daysInMon[i];
 	return res;
+}
+
+String Date::toString() const
+{
+	String date;
+	date += String::toString(day);
+	date += "-";
+	date += String::toString(month);
+	date += "-";
+	date += String::toString(year);
+	return date;
 }
 
 Date Date::operator+(const Date& dt)

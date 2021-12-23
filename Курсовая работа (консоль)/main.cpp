@@ -3,6 +3,7 @@
 #include <string>
 #include <ctime>
 #include <vector>
+#include "Form.h"
 #include "DataBase.h"
 #include "Array.h"
 #include "String.h"
@@ -10,24 +11,22 @@
 #include "Account.h"
 #include "Identifier.h"
 #include "Date.h"
+#include "Menu.h"
+#include "Table.h"
 
-int comp(const int& a, const int& b)
-{
-	return a - b;
-}
+DataBase<Account> accounts("files/accounts.txt");
+DataBase<BankAccount> bank_accounts("files/bank_accounts.txt");
 
 int main()
 {
-	//std::cout << sizeof(String) << std::endl;
-	DataBase<Account> accounts("files/accounts.txt");
+	SetConsoleCP(1251);
+	SetConsoleOutputCP(1251);
+	SetConsoleDisplayMode(hConsole, CONSOLE_FULLSCREEN_MODE, 0);
 	accounts.read();
-	std::cout << Identifier<Account>::getFreeId() << std::endl;
-	std::cout << Identifier<Account>::getFreeId() << std::endl;
-	std::cout << Identifier<Account>::getFreeId() << std::endl;
-	std::cout << Identifier<Account>::getFreeId() << std::endl;
+	bank_accounts.read();
+	MainForm form;
+	form.init();
 	accounts.write();
-	/*DataBase<String> t("temp.txt");
-	t.read();*/
-	//std::cout << BANK << std::endl;
+	bank_accounts.write();
 	return 0;
 }

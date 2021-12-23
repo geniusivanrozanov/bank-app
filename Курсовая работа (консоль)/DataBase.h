@@ -15,7 +15,7 @@ template<class T>
 class DataBase
 {
 private:
-	Array<T*> data;
+	Vector<T*> data;
 	UndoRedo<T*> undoredo;
 	const String FILE_NAME;
 public:
@@ -25,22 +25,36 @@ public:
 	void read();
 	void write() const;
 	void sort(int(*comp)(T* const&, T* const&));
+	void push(T*);
 	void add(T*);
 	void del(T*);
 	void change(T*, T*);
 	void undo();
 	void redo();
+	void reverse();
+
+	void clearUndoRedo();
+
+	bool canUndo();
+	bool canRedo();
 
 	int indexOf(T* const&, int(*comp)(T* const&, T* const&)) const;
 	int size() const;
+	template<class U>
+	int indexOfByPatameter(const U&, int(*comp)(T* const&, const U&)) const;
 
 	T* at(int);
+
+	Vector<T*> findAll(T* const&, int(*comp)(T* const&, T* const&)) const;
 
 	template<class T>
 	friend std::ostream& operator<< (std::ostream&, const DataBase<T>&);
 	template<class T>
 	friend std::istream& operator>> (std::istream&, DataBase<T>&);
 };
+
+extern DataBase<Account> accounts;
+extern DataBase<BankAccount> bank_accounts;
 
 template<class T>
 inline DataBase<T>::DataBase(const String& file)
@@ -96,6 +110,12 @@ inline void DataBase<T>::sort(int(*comp)(T* const&, T* const&))
 }
 
 template<class T>
+inline void DataBase<T>::push(T* element)
+{
+	data.push(element);
+}
+
+template<class T>
 inline void DataBase<T>::add(T* element)
 {
 	undoredo.add(element);
@@ -126,9 +146,65 @@ inline void DataBase<T>::redo()
 }
 
 template<class T>
+inline bool DataBase<T>::canUndo()
+{
+	return undoredo.canUndo();
+}
+
+template<class T>
+inline bool DataBase<T>::canRedo()
+{
+	return undoredo.canRedo();
+}
+
+template<class T>
+inline void DataBase<T>::clearUndoRedo()
+{
+	undoredo.clear();
+}
+
+template<class T>
+inline void DataBase<T>::reverse()
+{
+	data.reverse();
+}
+
+template<class T>
 inline int DataBase<T>::indexOf(T* const& src, int(*comp)(T* const&, T* const&)) const
 {
 	return data.indexOf(src, comp);
+}
+
+template<class T>
+template<class U>
+inline int DataBase<T>::indexOfByPatameter(const U& parameter, int(*comp)(T* const&, const U&)) const
+{
+	int index = data.size() - 1;
+	while (index >= 0)
+	{
+		if (!comp(data[index], parameter))
+		{
+			break;
+		}
+		index--;
+	}
+	return index;
+}
+
+template<class T>
+inline Vector<T*> DataBase<T>::findAll(T* const& src, int(*comp)(T* const&, T* const&)) const
+{
+	Vector<T*> res;
+	int index = data.indexOf(src, comp);
+	while (index >= 0)
+	{
+		if (!comp(src, data.at(index)))
+		{
+			res.push(data.data(index));
+		}
+		index--;
+	}
+	return res;
 }
 
 template<class T>
@@ -174,29 +250,33 @@ inline std::istream& operator>>(std::istream& in, DataBase<T>& db)
 template<>
 inline std::istream& operator>>(std::istream& in, DataBase<Account>& db)
 {
+	Account* element;
 	in.peek();
 	while (!in.eof())
 	{
-		int id;
-		int status;
-		String login;
-		String password;
-		in >> id >> login >> password >> status;
-		Account* element;
-		if (status == ADMIN)
-		{
-			element = new Admin(id, static_cast<Status>(status), login, password);
-		}
+		int st;
+		in >> st;
+		if (st == Account::ADMIN)
+			element = new Admin();
 		else
-		{
-			element = new Client(id, static_cast<Status>(status), login, password);
-		}
+			element = new Client(static_cast<Account::Status>(st));
+		in >> *element;
 		db.data.push(element);
 	}
 	if (db.size() > 0)
 	{
 		db.sort(Account::compareId);
 		Identifier<Account>::setMaxId(db.at(db.size() - 1)->getId());
+	}
+	else
+	{
+		element = new Admin();
+		element->setLogin("admin");
+		element->setPassword("admin");
+		element->setSurname("Админов");
+		element->setName("Админ");
+		element->setPatronymic("Админович");
+		db.data.push(element);
 	}
 	return in;
 }

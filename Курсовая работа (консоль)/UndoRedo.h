@@ -6,12 +6,12 @@ template<class T>
 class UndoRedo
 {
 private:
-	Array<T>& data;
-	Array<Action<T>*> actions;
+	Vector<T>& data;
+	Vector<Action<T>*> actions;
 	int head;
 	void destroyArray(int, int);
 public:
-	UndoRedo(Array<T>&);
+	UndoRedo(Vector<T>&);
 	~UndoRedo();
 
 	void add(T);
@@ -20,6 +20,8 @@ public:
 
 	void undo();
 	void redo();
+
+	void clear();
 
 	bool canUndo();
 	bool canRedo();
@@ -36,7 +38,7 @@ inline void UndoRedo<T>::destroyArray(int begin, int end)
 }
 
 template<class T>
-inline UndoRedo<T>::UndoRedo(Array<T>& data) 
+inline UndoRedo<T>::UndoRedo(Vector<T>& data) 
 	: data(data), head(-1)
 {
 }
@@ -44,7 +46,7 @@ inline UndoRedo<T>::UndoRedo(Array<T>& data)
 template<class T>
 inline UndoRedo<T>::~UndoRedo()
 {
-	destroyArray(0, actions.size());
+	clear();
 }
 
 template<class T>
@@ -87,6 +89,13 @@ inline void UndoRedo<T>::redo()
 	{
 		actions[++head]->redo(data);
 	}
+}
+
+template<class T>
+inline void UndoRedo<T>::clear()
+{
+	destroyArray(0, actions.size());
+	head = -1;
 }
 
 template<class T>
